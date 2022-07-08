@@ -68,7 +68,8 @@ root.render(
     the mousewheel to change that value.</p>
     <p>The animate knob still does nothing, chorus needs lots of work and
     resonance is very unstable - don't change it too fast.</p>
-    <p>Inspired by <a href="https://youtu.be/G46L06M6R0I" target="_blank" rel="noreferrer">The Runner</a> and <a href="https://joshuageisler.medium.com/modeling-an-analog-delay-in-the-web-audio-api-4ac1024e925" target="_blank" rel="noreferrer">Joshua Geisler</a>.</p>
+    <p>Inspired by <a href="https://youtu.be/G46L06M6R0I" target="_blank" rel="noreferrer">The Runner</a>
+    and <a href="https://joshuageisler.medium.com/modeling-an-analog-delay-in-the-web-audio-api-4ac1024e925" target="_blank" rel="noreferrer">Joshua Geisler</a>.</p>
   </React.StrictMode>
 );
 
