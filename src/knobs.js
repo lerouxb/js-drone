@@ -180,7 +180,7 @@ class VolumeKnob extends Knob {
 
 export const knobs = [
   new PitchKnob(0.57),
-  new HarmonicsKnob(0),
+  new HarmonicsKnob(1),
   new CutoffKnob(1),
   new ResonanceKnob(0),
   new AnimateKnob(0),
