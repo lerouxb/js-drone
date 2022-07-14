@@ -100,8 +100,8 @@ function Knob({ value, index, total, isSelected, select }) {
 function ActiveSelection({ activeKnob }) {
   return (
     <svg>
-    <text x="120" y="80" className="main-name-text">{activeKnob.name}</text>
-    <text x="120" y="100" className="main-value-text">{activeKnob.label}</text>
+    <text x="120" y="65" className="main-name-text">{activeKnob.name}</text>
+    <text x="120" y="85" className="main-value-text">{activeKnob.label}</text>
     </svg>
   );
 }
@@ -170,7 +170,7 @@ const Oscilloscope = ({ analyser, ...props }) => {
     }
   }, [analyser]);
   
-  return <foreignObject x="50" y="115" width="140" height="50">
+  return <foreignObject x="50" y="95" width="140" height="50">
     <canvas ref={canvasRef} {...props} xmlns="http://www.w3.org/1999/xhtml"/>
   </foreignObject>;
 }
