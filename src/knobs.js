@@ -45,16 +45,22 @@ class PitchKnob extends Knob {
     return Math.floor(this.value * (notes.length - 1));
   }
 
+  get frequency() {
+    return 26.5 + Math.pow(2, this.value * 8.691743519171276);
+  }
+
   get label() {
     //const freq = notes[this.noteNumber][2];
     //return `${freq.toFixed(2)}Hz`;
-    const noteName = notes[this.noteNumber][1];
-    return noteName.split('/')[0];
+    //const noteName = notes[this.noteNumber][1];
+    //return noteName.split('/')[0];
+    return `${this.frequency.toFixed(2)}Hz`;
   }
 
   get param() {
-    const freq = notes[this.noteNumber][2];
-    return freq;
+    //const freq = notes[this.noteNumber][2];
+    //return freq;
+    return this.frequency;
   }
 }
 

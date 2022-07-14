@@ -79,12 +79,20 @@ export function initNodes(player, knobs) {
     oscillatorGains.push(oscillatorGain);
     oscillator.connect(oscillatorGain).connect(input);
   }
+
+  const analyser = audioCtx.createAnalyser();
+  analyser.minDecibels = -90;
+  analyser.maxDecibels = -10;
+  analyser.smoothingTimeConstant = 0.85;
+
+  nodes.analyser = analyser;
+
   input.connect(distortion);
   distortion.connect(lowpass);
   lowpass.connect(output);
   delay.connect(output);
   lowpass.connect(delay).connect(feedback).connect(lowpass);
-  output.connect(audioCtx.destination);
+  output.connect(analyser).connect(audioCtx.destination);
 
   nodes.gains = {
     ...oscillatorGains,

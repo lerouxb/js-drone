@@ -1,10 +1,11 @@
-import React, {  useCallback, useRef, useState } from 'react';
+import React, {  useCallback, useRef, useEffect, useState } from 'react';
 import { observer } from "mobx-react"
 import { svgEllipseArc } from './svg-arc';
 import './watch.css';
 
+const NUM_SPOKES = 16;
 
-const Watch = observer(({ knobs, buttons, player }) => {
+const Watch = observer(({ knobs, buttons, player, nodes }) => {
   const [activeKnob, setActiveKnob] = useState(knobs[0]);
 
   /*
@@ -30,16 +31,17 @@ const Watch = observer(({ knobs, buttons, player }) => {
     player.stop();
   }, [player]);
 
-  return (<svg className="watch" width="320" height="320" tabIndex="0" onWheel={onWheel} onFocus={onFocus} onBlur={onBlur}>
+
+  return (<svg className="watch" width="322" height="322" tabIndex="0" onWheel={onWheel} onFocus={onFocus} onBlur={onBlur}>
     <Ring activeKnob={activeKnob} rotation={rotation} />
-    <svg className="bevel" x="13" y="13" width="294" height="294">
-      <circle cx="147" cy="147" r="147" className="bevel-circle" />
+    <svg className="bevel" x="14" y="14" width="292" height="292">
+      <circle cx="147" cy="147" r="144" className="bevel-circle" />
       { buttons.map((button, i) => (<Button {...button} key={`button-${i}`} index={i} total={buttons.length} />)) }
       <svg className="display" x="27" y="27" width="240" height="240">
         <circle cx="120" cy="120" r="120" className="display-circle" />
         { knobs.map((knob, i) => (<Knob {...knob} key={`knob-${i}`} index={i} total={knobs.length} isSelected={knob === activeKnob} select={() => setActiveKnob(knobs[i])}/>)) }
         <ActiveSelection activeKnob={activeKnob}/>
-        <Oscilloscope />
+        <Oscilloscope width="150" height="50" analyser={nodes.analyser}/>
       </svg>
     </svg>
   </svg>);
@@ -48,13 +50,13 @@ const Watch = observer(({ knobs, buttons, player }) => {
 function Ring({ activeKnob, rotation }) {
   const parts = [];
   //parts.push(svgEllipseArc([160, 160],[160,160], [-Math.PI/180, Math.PI/90], 0));
-  for (let i=0; i<20; ++i) {
-    parts.push(svgEllipseArc([160, 160],[160,160], [0, Math.PI/360], Math.PI*2 / 20 * i));
+  for (let i=0; i<NUM_SPOKES; ++i) {
+    parts.push(svgEllipseArc([161, 161],[150,150], [0, Math.PI/360], Math.PI*2 / NUM_SPOKES * i));
   }
   const d = parts.join(' ');
   
-  return <svg className="ring" width="320" height="320">
-    <circle className="ring-circle" cx="160" cy="160" r="160" />
+  return <svg className="ring" width="322" height="322">
+    <circle className="ring-circle" cx="161" cy="161" r="160" />
     <path className="grip" d={d} style={{transform: `rotate(${rotation*360}deg)`}}/>
   </svg>;
 }
@@ -104,8 +106,73 @@ function ActiveSelection({ activeKnob }) {
   );
 }
 
-function Oscilloscope() {
-  return <canvas />
+const Oscilloscope = ({ analyser, ...props }) => {
+  const canvasRef = useRef(null);
+  
+  useEffect(() => {
+
+    if (!analyser) {
+      return;
+    }
+
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d')
+
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+    analyser.fftSize = 2048;
+    const bufferLength = analyser.fftSize;
+    const dataArray = new Uint8Array(bufferLength);
+
+    let frameCount = 0;
+    let animationFrameId;
+
+    //Our draw came here
+    const render = () => {
+      frameCount++;
+
+      animationFrameId = window.requestAnimationFrame(render);
+
+      analyser.getByteTimeDomainData(dataArray);
+
+      context.fillStyle = '#f2f2f2';
+      context.fillRect(0, 0, WIDTH, HEIGHT);
+
+      context.lineWidth = 2;
+      context.strokeStyle = 'rgb(0, 0, 0)';
+
+      context.beginPath();
+
+      const sliceWidth = WIDTH * 1.0 / bufferLength;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const v = dataArray[i] / 128.0;
+        const y = v * HEIGHT/2;
+
+        if (i === 0) {
+          context.moveTo(x, y);
+        } else {
+          context.lineTo(x, y);
+        }
+
+        x += sliceWidth;
+      }
+
+      context.lineTo(canvas.width, canvas.height/2);
+      context.stroke();
+    }
+
+    render();
+    
+    return () => {
+      window.cancelAnimationFrame(animationFrameId);
+    }
+  }, [analyser]);
+  
+  return <foreignObject x="50" y="115" width="140" height="50">
+    <canvas ref={canvasRef} {...props} xmlns="http://www.w3.org/1999/xhtml"/>
+  </foreignObject>;
 }
 
 /*

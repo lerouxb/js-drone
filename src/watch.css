@@ -1,3 +1,13 @@
+:root {
+  --bg: #f2f2f2;
+  --fa: black;
+  --fb:hotpink;
+
+  --watch: hotpink;
+  --grip: #eee;
+  --focus: black;
+}
+
 .watch,
 .ring,
 .bevel,
@@ -19,19 +29,19 @@ p {
 }
 
 .ring-circle {
-  fill: silver;
+  fill: var(--watch);
+  stroke: none;
+  stroke-width: 1px;
 } 
 
-.watch:focus .ring-circle {
-  fill: black;
-}
-
 .bevel-circle {
-  fill: silver;
+  fill: var(--watch);
+  stroke-width: 1px;
+  stroke: var(--grip);
 }
 
 .display-circle {
-  fill: white;
+  fill: var(--bg);
 }
 
 .main-name-text {
@@ -46,25 +56,26 @@ p {
 text {
   font-family: monospace;
   font-size: 16px;
+  fill: var(--fa);
 }
 
 .knob .base {
-  fill: #f2f2f2;
-  stroke: lightgray;
+  fill: var(--bg);
+  stroke: var(--fa);
   cursor: pointer;
 }
 .knob .indicator {
-  fill: gray;
+  fill: var(--fa);
   stroke: none;
 }
 
 .knob.selected .base {
-  fill: yellow;
-  stroke: black;
+  fill: var(--fb);
+  stroke: var(--fa);
   stroke-width: 2px;
 }
 .knob.selected .indicator {
-  fill: black;
+  fill: var(--fa);
   r: 4px;
 }
 
@@ -77,15 +88,25 @@ text {
 
 .grip {
   fill: none;
-  stroke: white;
+  stroke: var(--grip);
   stroke-width: 20px;
   transform-origin: center;
   /*transition: transform .1s ease-in-out;  */
 }
 
+.watch:focus .bevel-circle {
+  stroke: var(--focus);
+}
+.watch:focus .ring-circle {
+  stroke: var(--focus);
+}
+.watch:focus .grip {
+  stroke: var(--focus);
+}
+
 
 .progress-circle {
-  fill: black;
+  fill: var(--fg);
   stroke: none;
 }
 

@@ -62,7 +62,7 @@ const player = new Player();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Watch buttons={buttons} knobs={knobs} player={player} />
+    <Watch buttons={buttons} knobs={knobs} player={player} nodes={nodes} />
     <p>Prototype. Mouse-only for now. Click on the "watch" to focus it and start
     the audio, click outside to blur and stop. Click a "knob" to select it, use
     the mousewheel to change that value.</p>
