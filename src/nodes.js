@@ -54,13 +54,9 @@ export function initNodes(player, knobs) {
   };
   
   const delay = audioCtx.createDelay();
-  delay.delayTime.value = 0.0375;
-  
-  feedback.gain.value = 0.3;
   
   const lfo = audioCtx.createOscillator();
   const lfoGain = audioCtx.createGain();
-  lfoGain.gain.value = 0.0005; // TODO: should this come from a setting somehow?
   lfo.connect(lfoGain);
   lfoGain.connect(delay.delayTime);
   
@@ -101,11 +97,8 @@ export function initNodes(player, knobs) {
     output
   };
   
-  // TODO: cross-fade the harmonics
   // TODO: should the oscillators go a bit out of sync?
-  // TODO: "gain" type distortion
   // TODO: LFO for controlling everything
-  // TODO: oscilloscope
   // TODO: noise + sample/hold might be better for modulating delay time
 
 
@@ -145,8 +138,14 @@ export function initNodes(player, knobs) {
     lowpass.Q.value = getKnob('Resonance').param;
     
     // TODO: should the knob control the LFO frequency, LFO gain, delay time or feedback gain?
+    delay.delayTime.value = 0.0375;
+    //feedback.gain.value = 0.3;
+    feedback.gain.value = 0; // TODO
+    //lfoGain.gain.value = 0.0005; // TODO: should this come from a setting somehow?
+    lfoGain.gain.value = 0; // TODO
     nodes.delays.chorus.delayTime.value = getKnob('Chorus').param;
-    nodes.lfos.chorus.frequency.value = 0.1;
+    //nodes.lfos.chorus.frequency.value = 0.1;
+    nodes.lfos.chorus.frequency.value = 0; // TODO
 
     distortion.curve = makeDistortionCurve(getKnob('Gain').value * 100);
   });
