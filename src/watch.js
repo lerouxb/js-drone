@@ -100,7 +100,7 @@ function Knob({ value, index, total, isSelected, select }) {
 function ActiveSelection({ activeKnob }) {
   return (
     <svg>
-    <text x="120" y="65" className="main-name-text">{activeKnob.name}</text>
+    <text x="120" y="61" className="main-name-text">{activeKnob.name}</text>
     <text x="120" y="85" className="main-value-text">{activeKnob.label}</text>
     </svg>
   );
